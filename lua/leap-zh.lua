@@ -1,5 +1,3 @@
--- 改造之前的parse func，把文档变成{row，col}的形式，输入的是一个字符串
--- (1,1) index!!
 local ut = require("jb_utils")
 local flypy_table = require("flypy_simp")
 local M = {}
@@ -11,6 +9,7 @@ local flypy = function(str)
 		return str
 	end
 end
+
 local parse_line = function(str, line)
 	local cum_l = 1
 	local parsed = {}
@@ -39,24 +38,71 @@ local parse = function()
 	return parsed
 end
 
+local function get_char()
+  local i = 1
+  local tmp = ""
+  while i < 3 do
+    local a = vim.fn.getcharstr()
+    tmp = tmp .. a
+    i = i + 1
+  end
+  return tmp
+end
+
 local find_han = function()
-	local str = vim.fn.input("")
-	local parsed = parse()
+	local str = get_char()
+  local parsed = parse()
+  local pos = vim.api.nvim_win_get_cursor(0)
 	local found = {}
 	for _, tok in ipairs(parsed) do
-		if tok.t == str then
+		if tok.t == str and tok.row == pos[1] and tok.col > pos[2] then
+      found[#found + 1] = { pos = { tok.row, tok.col } }
+    elseif tok.t == str and tok.row > pos[1] then
 			found[#found + 1] = { pos = { tok.row, tok.col } }
 		end
 	end
-	print(vim.inspect(found))
+	return found
+end
+
+local find_han_bak = function()
+	local str = get_char()
+  local parsed = parse()
+  local pos = vim.api.nvim_win_get_cursor(0)
+	local found = {}
+	for _, tok in ipairs(parsed) do
+		if tok.t == str and tok.row == pos[1] and tok.col < pos[2] then
+      found[#found + 1] = { pos = { tok.row, tok.col } }
+    elseif tok.t == str and tok.row < pos[1] then
+			found[#found + 1] = { pos = { tok.row, tok.col } }
+		end
+	end
 	return found
 end
 
 M.leap_zh = function()
 	local winid = vim.api.nvim_get_current_win()
 	require("leap").leap({
+    my_custom_flag = true,
 		target_windows = { winid },
 		targets = find_han(),
 	})
 end
+
+M.leap_zh_bak = function()
+	local winid = vim.api.nvim_get_current_win()
+	require("leap").leap({
+    my_custom_flag = true,
+		target_windows = { winid },
+		targets = find_han_bak(),
+	})
+end
+
+-- vim.api.nvim_create_autocmd('User', {
+--   pattern = 'LeapEnter',
+--   callback = function ()
+--     if require('leap').state.args.my_custom_flag then
+--       vim.api.nvim_feedkeys("s", "n", true)
+--     end
+--   end
+-- })
 return M
