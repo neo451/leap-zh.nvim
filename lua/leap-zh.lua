@@ -1,5 +1,5 @@
 local ut = require("jb_utils")
-local flypy_table = require("flypy_simp")
+local flypy_table = require("flypy")
 local M = {}
 
 local flypy = function(str)
@@ -8,6 +8,14 @@ local flypy = function(str)
 	else
 		return str
 	end
+end
+
+local function reverse(x)
+  local rev = {}
+    for i=#x, 1, -1 do
+      rev[#rev+1] = x[i]
+    end
+  return rev
 end
 
 local parse_line = function(str, line)
@@ -76,33 +84,21 @@ local find_han_bak = function()
 			found[#found + 1] = { pos = { tok.row, tok.col } }
 		end
 	end
-	return found
+	return reverse(found)
 end
 
 M.leap_zh = function()
-	local winid = vim.api.nvim_get_current_win()
 	require("leap").leap({
     my_custom_flag = true,
-		target_windows = { winid },
 		targets = find_han(),
 	})
 end
 
 M.leap_zh_bak = function()
-	local winid = vim.api.nvim_get_current_win()
 	require("leap").leap({
     my_custom_flag = true,
-		target_windows = { winid },
 		targets = find_han_bak(),
 	})
 end
 
--- vim.api.nvim_create_autocmd('User', {
---   pattern = 'LeapEnter',
---   callback = function ()
---     if require('leap').state.args.my_custom_flag then
---       vim.api.nvim_feedkeys("s", "n", true)
---     end
---   end
--- })
 return M
