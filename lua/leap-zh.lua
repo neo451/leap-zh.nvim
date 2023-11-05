@@ -4,7 +4,7 @@ local M = {}
 
 local flypy = function(str)
 	if flypy_table[str] ~= nil then
-		return string.sub(flypy_table[str], 1, 2) -- 暂时只要双拼
+		return string.sub(flypy_table[str], 1, 2) -- 暂时只有一个音
 	else
 		return str
 	end
