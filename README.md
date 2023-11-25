@@ -6,7 +6,8 @@
 
 ```lua
 -- dependency 可以不要
-  { 'noearc/leap-zh.nvim', dependencies = { 'noearc/jieba-lua' } }, ```
+  { 'noearc/leap-zh.nvim', dependencies = { 'noearc/jieba-lua' } }
+```
 
 ## 键位
 
