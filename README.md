@@ -1,6 +1,6 @@
 # leap-zh.nvim
 
-基于leap.nvim的中文词跳转
+基于leap.nvim的中文词跳转, 双排方案选择小鹤双拼
 
 ## 安装
 
@@ -18,3 +18,7 @@ map.set('n', 'fs', ":lua require'leap-zh'.leap_zh()<CR>") -- 向下搜索
 map.set('n', 'fb', ":lua require'leap-zh'.leap_zh_bak()<CR>") -- 向上搜索
 map.set('n', 'fw', ":lua require'leap-zh'.leap_jieba()<CR>") -- 搜索当前行的中文词
 ```
+
+## TODO
+- [ ] 处理中英混合文件
+- [ ] 增加更多双排方案
