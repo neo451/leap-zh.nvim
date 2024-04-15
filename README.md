@@ -1,6 +1,6 @@
 # leap-zh.nvim
 
-基于 [leap.nvim](https://github.com/ggandor/leap.nvim) 的中文词跳转, 双排方案选择[小鹤双拼](https://flypy.com/)
+基于 [leap.nvim](https://github.com/ggandor/leap.nvim) 的中文词跳转, 双拼方案选择[小鹤双拼](https://flypy.com/)
 
 ## 安装
 
