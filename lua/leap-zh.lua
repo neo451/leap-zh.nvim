@@ -113,6 +113,18 @@ local find_han_bak = function()
 	return reverse(found)
 end
 
+local find_han_all = function()
+	local str = get_char()
+	local parsed = parse()
+	local found = {}
+	for _, tok in ipairs(parsed) do
+		if tok.t == str then
+			found[#found + 1] = { pos = { tok.row, tok.col } }
+		end
+	end
+	return found
+end
+
 M.leap_zh = function()
 	require("leap").leap({
 		targets = find_han(),
@@ -122,6 +134,12 @@ end
 M.leap_zh_bak = function()
 	require("leap").leap({
 		targets = find_han_bak(),
+	})
+end
+
+M.leap_zh_all = function()
+	require("leap").leap({
+		targets = find_han_all(),
 	})
 end
 
