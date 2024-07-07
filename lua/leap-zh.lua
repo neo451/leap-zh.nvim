@@ -1,4 +1,3 @@
-local ut = require("jb_utils")
 local jieba = require("jieba")
 local flypy_table = require("flypy")
 local M = {}
@@ -21,10 +20,20 @@ local function reverse(x)
 	return rev
 end
 
+local function split_char(str)
+	local res = {}
+	local p = "[%z\1-\127\194-\244][\128-\191]*"
+
+	for ch in string.gmatch(str, p) do
+		table.insert(res, ch)
+	end
+	return res
+end
+
 local parse_line = function(str, line)
 	local cum_l = 1
 	local parsed = {}
-	local tokens = ut.split_char(str)
+	local tokens = split_char(str)
 	for _, tok in ipairs(tokens) do
 		local i = cum_l
 		local t = flypy(tok)
