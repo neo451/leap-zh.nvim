@@ -18,7 +18,7 @@ map = vim.keymap
 map.set('n', 'fw', "<cmd>lua require'leap-zh'.leap_jieba()<CR>") -- 搜索当前行的中文词
 map.set('n', 'fs', "<cmd>lua require'leap-zh'.leap_zh()<CR>") -- 向下搜索
 map.set('n', 'fb', "<cmd>lua require'leap-zh'.leap_zh_bak()<CR>") -- 向上搜索
-map.set('n', 'fb', "<cmd>lua require'leap-zh'.leap_zh_all()<CR>") -- 同时向上下搜索，但不推荐，实现较为简单，可能因为leap的默认行为跳得过远
+map.set('n', 'fb', "<cmd>lua require'leap-zh'.leap_zh_all()<CR>") -- 同时向上下搜索，默认先跳转到向后搜素的第一个结果
 map.set('n', 'fw', "<cmd>lua require'leap-zh'.leap_jieba()<CR>") -- 搜索当前行的中文词
 ```
 

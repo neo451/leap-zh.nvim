@@ -115,12 +115,29 @@ end
 
 local find_han_all = function()
 	local str = get_char()
+	local pos = vim.api.nvim_win_get_cursor(0)
 	local parsed = parse()
+	local rev = {}
 	local found = {}
 	for _, tok in ipairs(parsed) do
 		if tok.t == str then
-			found[#found + 1] = { pos = { tok.row, tok.col } }
+			if tok.row == pos[1] then
+				if tok.col > pos[2] then
+					found[#found + 1] = { pos = { tok.row, tok.col } }
+				else
+					rev[#rev + 1] = { pos = { tok.row, tok.col } }
+				end
+			else
+				if tok.row > pos[1] then
+					found[#found + 1] = { pos = { tok.row, tok.col } }
+				else
+					rev[#rev + 1] = { pos = { tok.row, tok.col } }
+				end
+			end
 		end
+	end
+	for _, tok in ipairs(reverse(rev)) do
+		found[#found + 1] = tok
 	end
 	return found
 end
