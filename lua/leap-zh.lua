@@ -34,9 +34,15 @@ local parse_line = function(str, line)
 	local cum_l = 1
 	local parsed = {}
 	local tokens = split_char(str)
-	for _, tok in ipairs(tokens) do
+	for idx, tok in ipairs(tokens) do
 		local i = cum_l
 		local t = flypy(tok)
+
+                -- 支持非汉字的情况
+                if #t == 1 and tokens[idx+1] ~= nil and #tokens[idx+1] == 1 then
+                    t = t .. tokens[idx+1]
+                end
+
 		cum_l = cum_l + #tok
 		parsed[#parsed + 1] = { row = line, col = i, t = t }
 	end
