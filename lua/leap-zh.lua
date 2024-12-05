@@ -45,6 +45,12 @@ local parse_line = function(str, line)
 
 		cum_l = cum_l + #tok
 		parsed[#parsed + 1] = { row = line, col = i, t = t }
+
+                -- 字母支持小写搜索大写
+                local t_lower = string.lower(t)
+                if t_lower ~= t then
+                    parsed[#parsed + 1] = { row = line, col = i, t = t_lower }
+                end
 	end
 	return parsed
 end
