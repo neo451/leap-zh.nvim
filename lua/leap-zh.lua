@@ -55,11 +55,11 @@ local parse_line = function(str, line)
 	return parsed
 end
 
-local parse = function()
-	local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+local parse = function(startline, endline)
+	local lines = vim.api.nvim_buf_get_lines(0, startline, endline, false)
 	local parsed = {}
 	for i, line in ipairs(lines) do
-		local parsed_line = parse_line(line, i)
+		local parsed_line = parse_line(line, startline + i)
 		for _, tok in ipairs(parsed_line) do
 			parsed[#parsed + 1] = tok
 		end
@@ -97,8 +97,15 @@ end
 
 local find_han = function()
 	local str = get_char()
-	local parsed = parse()
+
 	local pos = vim.api.nvim_win_get_cursor(0)
+        local startline = pos[1] - 1
+
+        local win = vim.api.nvim_get_current_win()
+        local wininfo = vim.fn.getwininfo(win)[1]
+        local endline = wininfo['botline']
+
+	local parsed = parse(startline, endline)
 	local found = {}
 	for _, tok in ipairs(parsed) do
 		if tok.t == str and tok.row == pos[1] and tok.col > pos[2] then
@@ -112,8 +119,15 @@ end
 
 local find_han_bak = function()
 	local str = get_char()
-	local parsed = parse()
+
 	local pos = vim.api.nvim_win_get_cursor(0)
+        local endline = pos[1]
+
+        local win = vim.api.nvim_get_current_win()
+        local wininfo = vim.fn.getwininfo(win)[1]
+        local startline = wininfo['topline'] - 1
+
+	local parsed = parse(startline, endline)
 	local found = {}
 	for _, tok in ipairs(parsed) do
 		if tok.t == str and tok.row == pos[1] and tok.col < pos[2] then
@@ -128,7 +142,14 @@ end
 local find_han_all = function()
 	local str = get_char()
 	local pos = vim.api.nvim_win_get_cursor(0)
-	local parsed = parse()
+
+        local win = vim.api.nvim_get_current_win()
+        local wininfo = vim.fn.getwininfo(win)[1]
+        local startline = wininfo['topline'] - 1
+        local endline = wininfo['botline']
+
+	local parsed = parse(startline, endline)
+
 	local rev = {}
 	local found = {}
 	for _, tok in ipairs(parsed) do
